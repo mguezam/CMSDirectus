@@ -12,6 +12,13 @@ export default function Header({navigation}) {
     if (!headerNavigation || headerNavigation.items?.length === 0) {
         return null;
     }
+    console.log('keys:', Object.keys(headerNavigation));
+    console.log('colors:', {
+        search_background_color: headerNavigation.search_background_color,
+        search_text_color: headerNavigation.search_text_color,
+        search_color: headerNavigation.search_color,
+        search_text_color_v2: headerNavigation.search_text_color_v2,
+    });
 
     const backgroundColor = headerNavigation.background_color;
     const topBarColor = headerNavigation.top_bar_color;
@@ -42,7 +49,8 @@ export default function Header({navigation}) {
                     <div className="top-right">
                         <SocialLinks links={socialLinks} label={socialLinksLabel} color={socialLinksColor}/>
                         {headerNavigation.search_enabled && (
-                            <HeaderSearch placeholder={headerNavigation.search_placeholder ?? 'Cerca...'}/>
+                            <HeaderSearch placeholder={headerNavigation.search_placeholder ?? 'Cerca...'}
+                                          search_background_color={headerNavigation.search_background_color} search_text_color={headerNavigation.search_text_color}/>
                         )}
                     </div>
                 </div>

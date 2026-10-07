@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Link from 'next/link';
 
-export default function HeaderSearch({ placeholder = 'Search...' }) {
+export default function HeaderSearch({placeholder, search_background_color, search_text_color}) {
+    console.log('HeaderSearch props:', {placeholder, search_background_color, search_text_color});
+
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -38,11 +40,12 @@ export default function HeaderSearch({ placeholder = 'Search...' }) {
     }, []);
 
     return (
-        <div className="search-container" ref={containerRef}>
-            <div className="search-input-wrapper">
-                <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        <div className="search-container" ref={containerRef} style={{"--search_background_color": search_background_color}}>
+            <div className="search-input-wrapper" style={{"--search_text_color": search_text_color}}>
+                <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
                 <input
                     type="text"
@@ -59,7 +62,10 @@ export default function HeaderSearch({ placeholder = 'Search...' }) {
                 <ul className="search-results">
                     {results.map((item) => (
                         <li key={item.id}>
-                            <Link href={item.url} onClick={() => { setIsOpen(false); setQuery(''); }}>
+                            <Link href={item.url} onClick={() => {
+                                setIsOpen(false);
+                                setQuery('');
+                            }}>
                                 {item.title}
                             </Link>
                         </li>
@@ -73,10 +79,11 @@ export default function HeaderSearch({ placeholder = 'Search...' }) {
                 }
 
                 .search-input-wrapper {
+                    color: var(--search_text_color, black);
+                    background-color: var(--search_background_color, black);
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    background: #f7fafc;
                     border: 1px solid #e2e8f0;
                     border-radius: 8px;
                     padding: 8px 12px;
@@ -90,7 +97,7 @@ export default function HeaderSearch({ placeholder = 'Search...' }) {
                 }
 
                 .search-icon {
-                    color: #a0aec0;
+                    color: inherit;
                     flex-shrink: 0;
                 }
 
@@ -99,21 +106,21 @@ export default function HeaderSearch({ placeholder = 'Search...' }) {
                     outline: none;
                     background: transparent;
                     font-size: 15px;
-                    color: #1a202c;
+                    color: inherit;
                     width: 140px;
                     font-family: inherit;
                 }
 
                 .search-input::placeholder {
-                    color: #a0aec0;
+                    color: inherit;
                 }
 
                 .search-results {
                     position: absolute;
                     top: calc(100% + 8px);
                     right: 0;
-                    width: 340px;              /* 👈 slightly wider */
-                    max-width: 90vw;           /* 👈 never wider than the screen */
+                    width: 340px;
+                    max-width: 90vw;
                     max-height: 320px;
                     overflow-y: auto;
                     list-style: none;
@@ -133,10 +140,8 @@ export default function HeaderSearch({ placeholder = 'Search...' }) {
                     color: #1a202c;
                     text-decoration: none;
                     font-size: 15px;
-                    line-height: 1.4;                     /* 👈 nicer when wrapping */
+                    line-height: 1.4;
                     transition: background 0.15s, color 0.15s;
-
-                    /* single-line truncation with ellipsis */
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -151,6 +156,7 @@ export default function HeaderSearch({ placeholder = 'Search...' }) {
                     .search-container {
                         width: 100%;
                     }
+
                     .search-input {
                         width: 100%;
                     }
