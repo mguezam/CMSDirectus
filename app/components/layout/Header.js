@@ -42,7 +42,7 @@ export default function Header({navigation}) {
                                 style={{objectFit: 'contain', width: 'auto', height: 'auto'}}
                             />
                         )}
-                        <Link href="/directus-next-cms/public">
+                        <Link href="/">
                             <span className="logo-text">Consorzio di Bonifica Adige Po</span>
                         </Link>
                     </div>
