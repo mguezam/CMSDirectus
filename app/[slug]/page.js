@@ -1,5 +1,5 @@
 import client from '../../lib/directus';
-import { readItems } from '@directus/sdk';
+import {readItems} from '@directus/sdk';
 import HeroSection from '../components/blocks/HeroSection';
 import RichTextSection from '../components/blocks/RichTextSection';
 import GallerySection from '../components/blocks/GallerySection';
@@ -8,10 +8,12 @@ import FormSection from '../components/blocks/FormSection';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import Posts from '../components/blocks/Posts';
+import Breadcrumb from "@/app/components/layout/Breadcrumb";
+import {findTrail} from "@/lib/navigation";
 
 export async function generateMetadata({params}) {
     // Instead of using `/`, this code uses the slug to retrieve the page details
-    const { slug } = await params
+    const {slug} = await params
     const seoData = await client.request(
         readItems('pages', {
             filter: {
@@ -43,7 +45,7 @@ export async function generateMetadata({params}) {
 export default async function Page({params}) {
 
     // Instead of using `/`, this code uses the slug to retrieve the page details
-    const { slug } = await params;
+    const {slug} = await params;
 
     const homepageData = await client.request(
         readItems('pages', {
@@ -60,19 +62,15 @@ export default async function Page({params}) {
         })
     );
 
-    console.log('SLUG PAGE DEBUG:', {
-        slug,
-        permalinkQueried: `/${slug}`,
-        resultCount: homepageData.length,
-        firstResult: homepageData[0] ? { id: homepageData[0].id, permalink: homepageData[0].permalink } : null,
-    });
-
     const hero_data = homepageData[0].blocks?.filter(block => block.collection === 'block_hero')?.[0];
     const rich_text_data = homepageData[0].blocks?.filter(block => block.collection === 'block_richtext')?.[0];
     const gallery_data = homepageData[0].blocks?.filter(block => block.collection === 'block_gallery')?.[0];
     const pricing_data = homepageData[0].blocks?.filter(block => block.collection === 'block_pricing')?.[0];
     const form_data = homepageData[0].blocks?.filter(block => block.collection === 'block_form')?.[0];
     const posts = homepageData[0].blocks?.filter(block => block.collection === 'block_posts')?.[0];
+    const breadcrumbFontSize = homepageData[0].breadcrumb_font_size;
+    const breadcrumbColor = homepageData[0].breadcrumb_color;
+
 
     const navigationData = await client.request(
         readItems('navigation', {
@@ -82,11 +80,20 @@ export default async function Page({params}) {
         })
     );
 
+    const mainNav = navigationData.find((nav) => nav.title === 'Main Navigation');
+
+    const trail =
+        findTrail(mainNav?.items, `/${slug}`)?.map((item) => ({
+            title: item.title,
+            href: item.type === 'page' ? item.page?.permalink : null,
+        })) ?? [{title: homepageData[0].title}];
+
     return (
         <main>
             <Header
                 navigation={navigationData}
             />
+            <Breadcrumb trail={trail} breadcrumb_color={breadcrumbColor} breadcrumb_font_size={breadcrumbFontSize}/>
 
             <>
                 {hero_data && <HeroSection

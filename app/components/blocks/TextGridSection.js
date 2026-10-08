@@ -10,12 +10,20 @@ export default function TextGridSection({headline, items = []}) {
 
                 <div className="grid">
                     {items.map((item, idx) => {
-                        const slug = item.title.toLowerCase().replace(/\s+/g, "-");
+                        const link = resolveHref(item.url);
                         return (
                             <div key={idx} className="box">
-                                <Link href={`/${slug}`}>
+                                {link ? (
+                                    <Link
+                                        href={link.href}
+                                        target={link.external ? '_blank' : undefined}
+                                        rel={link.external ? 'noopener noreferrer' : undefined}
+                                    >
+                                        <h3 className="box-link">{item.title}</h3>
+                                    </Link>
+                                ) : (
                                     <h3 className="box-link">{item.title}</h3>
-                                </Link>
+                                )}
                             </div>
                         );
                     })}
@@ -28,6 +36,7 @@ export default function TextGridSection({headline, items = []}) {
                     margin: 0 auto;
                     padding: 60px 20px;
                 }
+
                 .text-grid-section {
                     background-color: #181A1B;
                 }
@@ -69,4 +78,18 @@ export default function TextGridSection({headline, items = []}) {
             `}</style>
         </section>
     );
+
+    function resolveHref(url) {
+        const raw = url?.trim();
+        if (!raw) return null;
+
+        // External: full address or other protocol (https://, http://, mailto:, tel:)
+        if (/^(https?:\/\/|mailto:|tel:)/i.test(raw)) {
+            return {href: raw, external: true};
+        }
+
+        // Internal: spaces become hyphens, and exactly one leading slash
+        const path = raw.replace(/\s+/g, '-').replace(/^\/+/, '');
+        return {href: `/${path}`, external: false};
+    }
 }
