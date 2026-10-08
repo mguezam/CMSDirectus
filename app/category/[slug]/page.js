@@ -1,135 +1,15 @@
-import client from '../../../lib/directus';
-import {readItems} from '@directus/sdk';
-import HeroSection from '../../components/blocks/HeroSection';
-import RichTextSection from '../../components/blocks/RichTextSection';
-import GallerySection from '../../components/blocks/GallerySection';
-import PricingSection from '../../components/blocks/PricingSection';
-import FormSection from '../../components/blocks/FormSection';
-import Header from '../../components/layout/Header';
-import Footer from '../../components/layout/Footer';
-import Posts from '../../components/blocks/Posts';
-import Breadcrumb from "@/app/components/layout/Breadcrumb";
-import {findTrail} from "@/lib/navigation";
+import {getPageByPermalink, getPageMetadata} from '@/lib/pages';
+import PageShell from "@/lib/PageShell";
 
 export async function generateMetadata({params}) {
-    // Instead of using `/`, this code uses the slug to retrieve the page details
-    const {slug} = await params
-    const seoData = await client.request(
-        readItems('pages', {
-            filter: {
-                permalink: {
-                    _eq: `/${slug}`
-                }
-            },
-            fields: [
-                "seo"
-            ]
-        })
-    );
-
-    if (!seoData || seoData.length === 0) {
-        return {
-            title: 'Default Title',
-            description: 'Default Description',
-        };
-    }
-
-    const pageData = seoData[0];
-
-    return {
-        title: pageData.seo.title,
-        description: pageData.seo.description,
-    };
+    const {slug} = await params;
+    return getPageMetadata(`/category/${slug}`);
 }
 
 export default async function Page({params}) {
-
-    // Instead of using `/`, this code uses the slug to retrieve the page details
     const {slug} = await params;
+    const {page, navigationData, trail} = await getPageByPermalink(`/category/${slug}`);
+    if (!page) return null;
 
-    const homepageData = await client.request(
-        readItems('pages', {
-            filter: {
-                permalink: {
-                    _eq: `/category/${slug}`
-                }
-            },
-            fields: [
-                "*",
-                "blocks.*",
-                "blocks.item.*.*.*",
-            ]
-        })
-    );
-
-    const hero_data = homepageData[0].blocks?.filter(block => block.collection === 'block_hero')?.[0];
-    const rich_text_data = homepageData[0].blocks?.filter(block => block.collection === 'block_richtext')?.[0];
-    const gallery_data = homepageData[0].blocks?.filter(block => block.collection === 'block_gallery')?.[0];
-    const pricing_data = homepageData[0].blocks?.filter(block => block.collection === 'block_pricing')?.[0];
-    const form_data = homepageData[0].blocks?.filter(block => block.collection === 'block_form')?.[0];
-    const posts = homepageData[0].blocks?.filter(block => block.collection === 'block_posts')?.[0];
-    const breadcrumbFontSize = homepageData[0].breadcrumb_font_size;
-    const breadcrumbColor = homepageData[0].breadcrumb_color;
-    const categoryName = slug.charAt(0).toUpperCase() + slug.slice(1);
-
-    const navigationData = await client.request(
-        readItems('navigation', {
-            fields: [
-                "*.*.*.*.*",
-            ]
-        })
-    );
-
-    const mainNav = navigationData.find((nav) => nav.title === 'Main Navigation');
-
-    const trail =
-        findTrail(mainNav?.items, `/${slug}`)?.map((item) => ({
-            title: item.title,
-            href: item.type === 'page' ? item.page?.permalink : null,
-        })) ?? [{title: homepageData[0].title}];
-
-    return (
-        <main>
-            <Header
-                navigation={navigationData}
-            />
-            <Breadcrumb trail={trail} breadcrumb_color={breadcrumbColor} breadcrumb_font_size={breadcrumbFontSize}/>
-
-            <>
-                {hero_data && <HeroSection
-                    tagline={hero_data.item.tagline}
-                    headline={hero_data.item.headline}
-                    description={hero_data.item.description}
-                    image={hero_data.item.image}
-                    layout={hero_data.item.layout}
-                    button_group={hero_data.item.button_group.buttons}
-                />}
-
-                {rich_text_data && <RichTextSection
-                    {...(rich_text_data.item)}
-                />}
-
-                {gallery_data && <GallerySection
-                    {...(gallery_data.item)}
-                />}
-
-                {pricing_data && <PricingSection
-                    {...(pricing_data.item)} />}
-
-                {posts && <Posts
-                    {...(posts.item)} categoryName = {categoryName}
-                />}
-
-                {form_data && <FormSection
-                    {...(form_data.item)}
-                />}
-
-            </>
-
-            <Footer
-                navigation={navigationData}
-            />
-
-        </main>
-    );
+    return <PageShell page={page} navigationData={navigationData} trail={trail} categoryName={page.title}/>;
 }

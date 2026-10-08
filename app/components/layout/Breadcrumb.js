@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-export default function Breadcrumb({trail = [], breadcrumb_color, breadcrumb_font_size}) {
+export default function Breadcrumb({trail = [], show_breadcrumb,breadcrumb_color, breadcrumb_font_size}) {
     if (!trail || trail.length === 0) return null;
 
     return (
@@ -26,6 +26,7 @@ export default function Breadcrumb({trail = [], breadcrumb_color, breadcrumb_fon
 
             <style jsx>{`
                 .breadcrumb {
+                    background-color: transparent;
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 20px 20px 0;

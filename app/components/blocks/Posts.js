@@ -6,10 +6,10 @@ import {useState, useEffect} from 'react';
 import {readItems} from '@directus/sdk';
 import client from '../../../lib/directus';
 
-export default function Posts({tagline, headline, limit = 6, headline_color, categoryName}) {
+export default function Posts({tagline, headline, limit = 6, headline_color, background_color, categoryName}) {
 
     const [posts, setPosts] = useState(null);
-
+    console.log('Posts props:', {background_color});
     useEffect(() => {
         async function fetchPosts() {
             const filter = {published_at: {_nnull: true}};
@@ -32,7 +32,7 @@ export default function Posts({tagline, headline, limit = 6, headline_color, cat
     }, [limit, categoryName]);
 
     return (
-        <section className="posts-section">
+        <section className="posts-section" style={{"--posts_background_color": background_color}}>
             <p>{tagline}</p>
             <h1 style={{"--headline_color": headline_color}}>{headline}</h1>
             <div className="posts-container">
@@ -46,11 +46,12 @@ export default function Posts({tagline, headline, limit = 6, headline_color, cat
                 ) : (
                     <div>Loading...</div>
                 )}
+
             </div>
             <style jsx>{`
                 .posts-section {
                     padding: 40px;
-                    background-color: #352A1D;
+                    background-color: var(--posts_background_color, #FFFFFF);
                 }
 
                 .posts-container {

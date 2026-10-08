@@ -3,7 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function HeroSection({tagline, headline, description, image, button_group = []}) {
+export default function HeroSection({tagline, headline, description, image, button_group}) {
+    const buttons = button_group?.buttons ?? button_group ?? [];
+
     return (
         <section className="hero-section">
             {image && (
@@ -24,9 +26,9 @@ export default function HeroSection({tagline, headline, description, image, butt
                     {headline && <h1>{headline}</h1>}
                     {description && <p className="description">{description}</p>}
 
-                    {button_group.length > 0 && (
+                    {buttons.length > 0 && (
                         <div className="button-group">
-                            {button_group.map((button, idx) => (
+                            {buttons.map((button, idx) => (
                                 <Link key={idx} href={resolveButtonUrl(button)}>
                                     <button className={`cta-button ${button.variant || 'default'}`}>
                                         {button.label}
@@ -39,6 +41,7 @@ export default function HeroSection({tagline, headline, description, image, butt
             </div>
 
             <style jsx>{`
+                /* unchanged */
                 .hero-section {
                     position: relative;
                     min-height: 500px;
@@ -129,14 +132,6 @@ export default function HeroSection({tagline, headline, description, image, butt
                     text-decoration: underline;
                 }
 
-                .hero-image {
-                    flex: 1;
-                    min-width: 300px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-
                 @media (max-width: 768px) {
                     .container {
                         flex-direction: column;
@@ -151,7 +146,6 @@ export default function HeroSection({tagline, headline, description, image, butt
     );
 }
 
-// Helper function to resolve button link
 function resolveButtonUrl(button) {
     if (button.type === 'page' && button.page) return `${button.page.permalink}`;
     if (button.type === 'post' && button.post) return `/posts/${button.post.id}`;
