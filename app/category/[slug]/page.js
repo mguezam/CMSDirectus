@@ -1,13 +1,13 @@
-import client from '../../lib/directus';
+import client from '../../../lib/directus';
 import {readItems} from '@directus/sdk';
-import HeroSection from '../components/blocks/HeroSection';
-import RichTextSection from '../components/blocks/RichTextSection';
-import GallerySection from '../components/blocks/GallerySection';
-import PricingSection from '../components/blocks/PricingSection';
-import FormSection from '../components/blocks/FormSection';
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
-import Posts from '../components/blocks/Posts';
+import HeroSection from '../../components/blocks/HeroSection';
+import RichTextSection from '../../components/blocks/RichTextSection';
+import GallerySection from '../../components/blocks/GallerySection';
+import PricingSection from '../../components/blocks/PricingSection';
+import FormSection from '../../components/blocks/FormSection';
+import Header from '../../components/layout/Header';
+import Footer from '../../components/layout/Footer';
+import Posts from '../../components/blocks/Posts';
 import Breadcrumb from "@/app/components/layout/Breadcrumb";
 import {findTrail} from "@/lib/navigation";
 
@@ -51,7 +51,7 @@ export default async function Page({params}) {
         readItems('pages', {
             filter: {
                 permalink: {
-                    _eq: `/${slug}`
+                    _eq: `/category/${slug}`
                 }
             },
             fields: [
@@ -70,7 +70,7 @@ export default async function Page({params}) {
     const posts = homepageData[0].blocks?.filter(block => block.collection === 'block_posts')?.[0];
     const breadcrumbFontSize = homepageData[0].breadcrumb_font_size;
     const breadcrumbColor = homepageData[0].breadcrumb_color;
-    const postCategory = homepageData[0].posts.category;
+    const categoryName = slug.charAt(0).toUpperCase() + slug.slice(1);
 
     const navigationData = await client.request(
         readItems('navigation', {
@@ -117,7 +117,7 @@ export default async function Page({params}) {
                     {...(pricing_data.item)} />}
 
                 {posts && <Posts
-                    {...(posts.item)}
+                    {...(posts.item)} categoryName = {categoryName}
                 />}
 
                 {form_data && <FormSection

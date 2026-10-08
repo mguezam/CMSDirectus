@@ -6,25 +6,30 @@ import {useState, useEffect} from 'react';
 import {readItems} from '@directus/sdk';
 import client from '../../../lib/directus';
 
-export default function Posts({tagline, headline, limit = 6, headline_color}) {
+export default function Posts({tagline, headline, limit = 6, headline_color, categoryName}) {
 
     const [posts, setPosts] = useState(null);
 
     useEffect(() => {
         async function fetchPosts() {
+            const filter = {published_at: {_nnull: true}};
+            if (categoryName) {
+                filter.category = {Name: {_eq: categoryName}};
+            }
+
             const data = await client.request(
                 readItems('posts', {
                     limit,
                     fields: ['id', 'title', 'slug', {'author': ["first_name", "last_name"]}, 'published_at', 'image.title', 'image.id', 'description',
-                        "background_color", "text_color"],
-                    filter: {published_at: {_nnull: true}},
+                        "background_color", "text_color", "category.Name", "category.slug"],
+                    filter: filter,
                 })
             );
             setPosts(data);
         }
 
         fetchPosts();
-    }, [limit])
+    }, [limit, categoryName]);
 
     return (
         <section className="posts-section">
@@ -33,11 +38,10 @@ export default function Posts({tagline, headline, limit = 6, headline_color}) {
             <div className="posts-container">
                 {posts ? (
                     <div className="posts-grid">
-                        {posts.map((post) => (
-                            <div key={post.id}>
-                                <Post {...post} />
-                            </div>
-                        ))}
+                        {posts.map((post) => {
+                            console.log(post);
+                            return <Post key={post.id} {...post} />;
+                        })}
                     </div>
                 ) : (
                     <div>Loading...</div>
@@ -81,7 +85,19 @@ export default function Posts({tagline, headline, limit = 6, headline_color}) {
     );
 }
 
-function Post({id, title, author, slug, description, image, content, published_at, background_color, text_color}) {
+function Post({
+                  id,
+                  title,
+                  author,
+                  slug,
+                  description,
+                  image,
+                  content,
+                  published_at,
+                  background_color,
+                  text_color,
+                  category
+              }) {
     return (
         <div className={'card'} style={{'--background_color': background_color}}>
             <Image
@@ -92,6 +108,9 @@ function Post({id, title, author, slug, description, image, content, published_a
                 className="gallery-image"
             />
             <h2 style={{'--text_color': text_color}}>{title}</h2>
+            <Link href={`/category/${category.slug}`}>
+                <p className={"category"}>{category?.Name}</p>
+            </Link>
             <p className="author">by {author.first_name} {author.last_name}</p>
             {content ? (
                 <>
@@ -100,48 +119,51 @@ function Post({id, title, author, slug, description, image, content, published_a
                     <div dangerouslySetInnerHTML={{__html: content}}/>
                 </>
             ) : (
-                <div>
-                    <p>{description}</p>
+                <div className={"body"}>
+                    <p className={"description"}>{description}</p>
                     <Link href={`/posts/${slug}`}>
-                        <div className="link">Read more</div>
+                        <div className="link">Leggi di più...</div>
                     </Link>
                 </div>
             )}
 
             <style jsx>{`
-
                 .card {
+                    display: flex;
+                    flex-direction: column;
                     background-color: var(--background_color, white);
                     border-radius: 8px;
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                     overflow: hidden;
                     transition: transform 0.3s ease;
                     max-width: 400px;
-                    height: 580px;
                     margin: 1rem;
                     position: relative;
+                }
+
+                .card .body {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                }
+
+                .card .description {
+                    flex: 1;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
                 }
 
                 .card:hover {
                     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
                 }
 
-                .card img {
+                .card :global(img) {
                     width: 100%;
                     height: 200px;
                     object-fit: cover;
                     display: block;
-                }
-
-                .article img {
-                    width: 100%;
-                    height: 500px;
-                    object-fit: cover;
-                    display: block;
-                }
-
-                .article .author {
-                    font-style: italic;
                 }
 
                 .card h2 {
@@ -151,17 +173,24 @@ function Post({id, title, author, slug, description, image, content, published_a
                 }
 
                 .card p {
-                    margin: 0 1rem 1rem;
+                    margin: 0 1rem 0.75rem;
                     color: #666;
                     line-height: 1.4;
-                    text-overflow: ellipsis;
-                    display: box;
+                }
+
+                .card .category {
+                    font-size: 24px;
+                }
+
+                .card .description {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
                     overflow: hidden;
-                    max-height: 4rem;
                 }
 
                 .link {
-                    margin: 1rem;
+                    margin: 0 1rem 1rem;
                     color: #0000EE;
                 }
             `}</style>
