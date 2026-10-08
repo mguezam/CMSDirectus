@@ -1,20 +1,30 @@
 "use client";
 
-export default function RichTextSection({ tagline, headline, content, alignment = 'center' }) {
+export default function RichTextSection({
+                                            tagline,
+                                            headline,
+                                            content,
+                                            alignment = 'center',
+                                            background_color,
+                                            tagline_color,
+                                            headline_color,
+                                            content_color
+                                        }) {
     return (
-        <section className="rich-text-section">
-            <div className="container" style={{ textAlign: alignment }}>
-                {tagline && <p className="tagline">{tagline}</p>}
-                {headline && <h2>{headline}</h2>}
+        <section className="rich-text-section" style={{"--richtext-background": background_color}}>
+            <div className="container" style={{textAlign: alignment}}>
+                {tagline && <p className="tagline" style={{"--tagline-color": tagline_color}}>{tagline}</p>}
+                {headline && <h2 style={{"--headline-color": headline_color}}>{headline}</h2>}
                 {content && (
-                    <div className="content" dangerouslySetInnerHTML={{ __html: content }} />
+                    <div className="content" dangerouslySetInnerHTML={{__html: content}}
+                         style={{"--content-color": content_color}}/>
                 )}
             </div>
 
             <style jsx>{`
                 .rich-text-section {
+                    background-color: var(--richtext-background, #151515);
                     padding: 80px 0;
-                    background-color: #ffffff;
                 }
 
                 .container {
@@ -25,7 +35,7 @@ export default function RichTextSection({ tagline, headline, content, alignment 
 
                 .tagline {
                     font-size: 18px;
-                    color: #718096;
+                    color: var(--tagline-color, #151515);
                     margin-bottom: 10px;
                 }
 
@@ -33,13 +43,13 @@ export default function RichTextSection({ tagline, headline, content, alignment 
                     font-size: 36px;
                     font-weight: bold;
                     margin-bottom: 30px;
-                    color: #1a202c;
+                    color: var(--headline-color, #151515);
                 }
 
                 .content {
                     font-size: 18px;
                     line-height: 1.7;
-                    color: #4a5568;
+                    color: var(--content-color, #151515);
                 }
 
                 .content :global(a) {
