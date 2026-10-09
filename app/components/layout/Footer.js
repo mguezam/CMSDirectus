@@ -2,10 +2,15 @@
 
 import Link from 'next/link';
 
+// Piè di pagina: disegna le voci del menu "Footer Navigation" e una riga di
+// copyright.
+//
+// navigation: tutti i menu letti da Directus (lo stesso elenco dato all'header)
 export default function Footer({ navigation }) {
-    // Find the Footer Navigation set by title
+    // Si cerca tra i menu quello con titolo "Footer Navigation"
     const footerNavigation = navigation?.filter((nav) => nav.title === 'Footer Navigation')[0];
 
+    // Se il menu non esiste o non ha voci, il footer non viene mostrato affatto
     if (!footerNavigation || !footerNavigation.items?.length) {
         return null;
     }
@@ -20,6 +25,9 @@ export default function Footer({ navigation }) {
                 </div>
 
                 <div className="footer-bottom">
+                    {/* Il testo "Your Site" e' scritto direttamente nel codice (non
+                        viene da Directus): per cambiarlo va modificato qui. L'anno e'
+                        calcolato in automatico. */}
                     <p>&copy; {new Date().getFullYear()} Your Site. All rights reserved.</p>
                 </div>
             </div>
@@ -53,6 +61,7 @@ export default function Footer({ navigation }) {
           color: #a0aec0;
         }
 
+        /* Su schermi stretti le voci si dispongono in colonna */
         @media (max-width: 768px) {
           .footer-content {
             flex-direction: column;
@@ -63,11 +72,18 @@ export default function Footer({ navigation }) {
     );
 }
 
-// Recursively render footer items
+// Disegna una voce del footer. Un gruppo non viene mostrato come titolo: si
+// disegnano direttamente i suoi figli, uno dopo l'altro. Non e' ricorsivo per
+// davvero: scende di un solo livello.
 function FooterNavigationItem({ item }) {
     if (item.type === 'group') {
         return (
             item.children?.map((child) => (
+                // target/rel: se la voce e' impostata per aprirsi in una nuova
+                // scheda, noopener noreferrer protegge la pagina originale.
+                // Attenzione: qui si usa child.label, mentre per le voci normali
+                // piu' sotto si usa item.title. Se il testo di un figlio non
+                // compare, controllare quale dei due campi esiste davvero.
                 <Link
                     href={resolveItemUrl(child)} key={child.id}
                     target={child.target === '_blank' ? '_blank' : undefined}
@@ -79,7 +95,7 @@ function FooterNavigationItem({ item }) {
         );
     }
 
-    // If not a group, treat it as a single link section
+    // Se non e' un gruppo, la voce e' un singolo link
     return (
         <Link
             href={resolveItemUrl(item)}
@@ -91,7 +107,9 @@ function FooterNavigationItem({ item }) {
     );
 }
 
-// Helper to resolve URL for page, post, or url types
+// Calcola la destinazione di una voce in base al suo tipo: pagina, post o URL
+// libero. Per le pagine il permalink contiene gia' la "/" iniziale. Se manca
+// il dato necessario si restituisce "#" (un link che non porta da nessuna parte).
 function resolveItemUrl(item) {
     if (item.type === 'page' && item.page) {
         return `${item.page.permalink}`;
