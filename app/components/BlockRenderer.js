@@ -24,9 +24,7 @@ export default function BlockRenderer({blocks = [], categoryName}) {
                 if (!Component) return null;
 
                 // Categories only make sense for the posts block
-                const extraProps = block.collection === 'block_posts'
-                    ? {categoryName}
-                    : {};
+                const extraProps = block.collection === 'block_posts' ? {categoryName} : {};
 
                 return <Component key={block.id} {...(block.item ?? {})} {...extraProps} />;
             })}
