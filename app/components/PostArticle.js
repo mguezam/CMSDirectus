@@ -28,7 +28,10 @@ export default function PostArticle({post}) {
     const meta = [authorName, date].filter(Boolean).join(' - ');
 
     return (
-        <article className="post">
+        <article className="post" style={{
+            "--post_background_color": post.background_color,
+            "--post_text_color": post.text_color,
+        }}>
             {/* La categoria compare solo se il post ne ha una */}
             {category?.Name && <p className="category">{category.Name}</p>}
 
@@ -65,8 +68,8 @@ export default function PostArticle({post}) {
                     max-width: 800px;
                     margin: 40px auto;
                     padding: 32px;
-                    background: #ffffff;
-                    color: #1a202c;
+                    background-color: var(--post_background_color, #ffffff);
+                    color: var(--post_text_color, #1a202c);
                     border-radius: 8px;
                 }
 
@@ -76,26 +79,27 @@ export default function PostArticle({post}) {
                     font-weight: 600;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
-                    color: #3182ce;
+                    color: inherit;
                 }
 
                 h1 {
                     margin: 0 0 12px;
                     font-size: 36px;
                     line-height: 1.2;
+                    color: inherit;
                 }
 
                 .meta {
                     margin: 0 0 24px;
                     font-size: 14px;
-                    color: #718096;
+                    color: inherit;
                 }
 
                 .lead {
                     margin: 24px 0;
                     font-size: 20px;
                     line-height: 1.6;
-                    color: #4a5568;
+                    color: inherit;
                 }
 
                 /* :global() serve perche' questi elementi (immagini, paragrafi, link...)
@@ -109,6 +113,7 @@ export default function PostArticle({post}) {
 
                 .content {
                     line-height: 1.7;
+                    color: inherit;
                 }
 
                 .content :global(h2),
@@ -121,7 +126,7 @@ export default function PostArticle({post}) {
                 }
 
                 .content :global(a) {
-                    color: #3182ce;
+                    color: inherit;
                     text-decoration: underline;
                 }
 
