@@ -70,7 +70,7 @@ export async function GET(request) {
                 results.push(...outcome.value);
             } else {
                 console.error(
-                    `[SEARCH] Failed to search "${SEARCH_TARGETS[i].collection}":`,
+                    `[RICERCA] Errore nella ricerca di "${SEARCH_TARGETS[i].collection}":`,
                     outcome.reason?.message ?? outcome.reason
                 );
             }
@@ -78,7 +78,7 @@ export async function GET(request) {
 
         return NextResponse.json({ results });
     } catch (err) {
-        console.error('[SEARCH] Unexpected error:', err);
+        console.error('[RICERCA] Errore imprevisto:', err);
         return NextResponse.json(
             { error: String(err?.message ?? err), results: [] },
             { status: 500 }

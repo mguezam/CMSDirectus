@@ -1,13 +1,14 @@
-import {getPageByPermalink, getPageMetadata} from '@/lib/pages';
-import PageShell from "@/lib/PageShell";
+import {getPageMetadata} from '@/lib/pages';
+import PageView from '@/lib/PageView';
 
+// Funzione speciale di Next.js: fornisce <title> e meta description.
+// Deve restare esportata da ogni rotta, perche' Next.js la cerca solo nel
+// file page.js della pagina che sta mostrando. Il permalink della home e' "/".
 export async function generateMetadata() {
     return getPageMetadata('/');
 }
 
-export default async function Home() {
-    const {page, navigationData, trail} = await getPageByPermalink('/');
-    if (!page) return null;
-
-    return <PageShell page={page} navigationData={navigationData} trail={trail}/>;
+// La home page: tutto il lavoro e' in PageView
+export default function Home() {
+    return <PageView permalink="/"/>;
 }
