@@ -5,6 +5,7 @@ import PricingSection from '@/app/components/blocks/PricingSection';
 import FormSection from "@/app/components/blocks/FormSection";
 import TextGridSection from '@/app/components/blocks/TextGridSection';
 import Posts from '@/app/components/blocks/Posts';
+import LinksSection from "@/app/components/blocks/LinksSection";
 
 // Tabella di corrispondenza: nome della collezione del blocco in Directus ->
 // componente che lo disegna. Le chiavi devono essere identiche ai nomi delle
@@ -20,6 +21,7 @@ const BLOCKS = {
     block_form: FormSection,
     block_textgrid: TextGridSection,
     block_posts: Posts,
+    block_links: LinksSection,
 };
 
 // Disegna tutti i blocchi di una pagina, nell'ordine impostato in Directus.

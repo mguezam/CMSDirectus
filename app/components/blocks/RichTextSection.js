@@ -1,5 +1,15 @@
 "use client";
 
+// Blocco "Rich Text": testo formattato (paragrafi, titoli, elenchi, link)
+// scritto dall'editor in Directus. Il contenuto e' HTML e viene inserito
+// cosi' com'e': va bene perche' lo scrivono solo gli editori del sito, non
+// i visitatori.
+//
+// tagline / headline:      testi introduttivi opzionali
+// content:                 HTML del corpo principale
+// alignment:               allineamento del contenitore ("left" o "center")
+// background_color:        sfondo della sezione (da Directus)
+// tagline_color, headline_color, content_color: colori dei singoli testi
 export default function RichTextSection({
                                             tagline,
                                             headline,
@@ -52,6 +62,10 @@ export default function RichTextSection({
                     color: var(--content-color, #151515);
                 }
 
+                /* Le regole sui figli del contenuto (a, p, h3, ul, ol, li) hanno
+                   bisogno di :global() perche' quegli elementi non sono scritti
+                   qui in JSX: li crea dangerouslySetInnerHTML e styled-jsx non
+                   aggiunge automaticamente il suo hash di scoping. */
                 .content :global(a) {
                     color: #3182ce;
                     text-decoration: underline;
@@ -66,11 +80,14 @@ export default function RichTextSection({
                     margin-bottom: 20px;
                 }
 
+                /* h3 iniettati dal contenuto usano lo stesso colore del testo.
+                   Non c'e' un selettore h3 "semplice": quello non raggiungerebbe
+                   gli h3 iniettati. */
                 .content :global(h3) {
                     font-size: 24px;
                     margin-top: 40px;
                     margin-bottom: 20px;
-                    color: #2d3748;
+                    color: var(--content-color, #151515);
                 }
 
                 .content :global(ul),

@@ -3,11 +3,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Blocco "Hero": sezione di apertura di una pagina, con immagine di sfondo,
+// titolo, descrizione e uno o piu' bottoni.
+//
+// tagline / headline / description: testi
+// image:                          immagine di sfondo (da Directus)
+// button_group:                   array di bottoni (o oggetto { buttons: [...] })
 export default function HeroSection({tagline, headline, description, image, button_group}) {
+    // Directus a volte restituisce button_group come oggetto { buttons: [...] },
+    // a volte come array diretto, a volte come null: questa riga normalizza
+    // tutti i casi in un array, cosi' il resto del componente e' piu' semplice.
     const buttons = button_group?.buttons ?? button_group ?? [];
 
     return (
         <section className="hero-section">
+            {/* <Image fill> riempie il contenitore (position: relative qui
+                sopra). priority dice a Next di caricarla subito, perche' e'
+                la prima cosa che l'utente vede. */}
             {image && (
                 <Image
                     src={`http://localhost:8055/assets/${image.id}?access_token=${process.env.NEXT_PUBLIC_DIRECTUS_TOKEN}`}
@@ -18,6 +30,8 @@ export default function HeroSection({tagline, headline, description, image, butt
                     style={{objectFit: 'cover'}}
                 />
             )}
+            {/* Velo scuro sopra l'immagine per rendere il testo leggibile
+                indipendentemente da quanto e' chiara la foto. */}
             <div className="hero-overlay"/>
 
             <div className="container">
@@ -30,6 +44,10 @@ export default function HeroSection({tagline, headline, description, image, butt
                         <div className="button-group">
                             {buttons.map((button, idx) => (
                                 <Link key={idx} href={resolveButtonUrl(button)}>
+                                    {/* La variante (outline, soft, ghost...) e'
+                                        una classe CSS: il colore di base e'
+                                        definito in .cta-button, le varianti
+                                        sovrascrivono. */}
                                     <button className={`cta-button ${button.variant || 'default'}`}>
                                         {button.label}
                                     </button>
@@ -41,7 +59,6 @@ export default function HeroSection({tagline, headline, description, image, butt
             </div>
 
             <style jsx>{`
-                /* unchanged */
                 .hero-section {
                     position: relative;
                     min-height: 500px;
@@ -110,6 +127,7 @@ export default function HeroSection({tagline, headline, description, image, butt
                     background-color: #2b6cb0;
                 }
 
+                /* Varianti: stesso bottone con stile diverso. */
                 .cta-button.outline {
                     background: transparent;
                     border: 2px solid #3182ce;
@@ -146,6 +164,11 @@ export default function HeroSection({tagline, headline, description, image, butt
     );
 }
 
+// Calcola l'URL del bottone in base al tipo scelto in Directus.
+// - page: usa il permalink della pagina collegata (gia' con slash iniziale)
+// - post: id del post -> /posts/<id>
+// - url:  URL libero scritto dall'editor
+// - altrimenti: "#" (link che non porta da nessuna parte)
 function resolveButtonUrl(button) {
     if (button.type === 'page' && button.page) return `${button.page.permalink}`;
     if (button.type === 'post' && button.post) return `/posts/${button.post.id}`;

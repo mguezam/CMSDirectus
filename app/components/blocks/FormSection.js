@@ -2,7 +2,17 @@
 
 import {useState} from 'react';
 
+// Blocco "Form": mostra un form dinamico costruito in Directus. Ogni campo
+// (testo, email, textarea...) e' definito nella collezione "forms" e arriva
+// qui gia' espanso. Le risposte vengono salvate in "form_submissions".
+//
+// tagline / headline: testi introduttivi
+// form:               oggetto con i campi e le impostazioni del form
+// background_color:   sfondo della sezione
+// headline_color:     colore del titolo
 export default function FormSection({tagline, headline, form, background_color, headline_color}) {
+    // formData e' un oggetto { nomeCampo: valore }. Viene inizializzato con
+    // tutti i campi a stringa vuota, cosi' ogni input e' controllato.
     const [formData, setFormData] = useState(
         () => form.fields.reduce((acc, field) => ({...acc, [field.name]: ''}), {})
     );
@@ -11,6 +21,9 @@ export default function FormSection({tagline, headline, form, background_color, 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState('');
 
+    // Aggiorna il valore del campo corrispondente ogni volta che l'utente
+    // digita. Si usa la forma funzionale di setFormData per non perdere
+    // aggiornamenti se piu' campi cambiano in rapida successione.
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData(prev => ({
@@ -36,6 +49,7 @@ export default function FormSection({tagline, headline, form, background_color, 
             }
 
             setIsSubmitted(true);
+            // Svuota il form per un eventuale secondo invio
             setFormData(form.fields.reduce((acc, field) => ({...acc, [field.name]: ''}), {}));
         } catch (err) {
             console.error(err);
@@ -45,6 +59,9 @@ export default function FormSection({tagline, headline, form, background_color, 
         }
     };
 
+    // Guardia: se il blocco non ha un form collegato non si mostra nulla.
+    // Va dopo gli hook per non violare le regole di React (gli hook devono
+    // essere chiamati sempre, nello stesso ordine).
     if (!form || !form.fields) return null;
 
     return (
@@ -55,6 +72,9 @@ export default function FormSection({tagline, headline, form, background_color, 
                     {headline && <h2 style={{"--form-headline": headline_color}}>{headline}</h2>}
                 </div>
 
+                {/* Dopo l'invio si sostituisce il form con un messaggio di
+                    successo. Il bottone "Submit another response" resetta lo
+                    stato e fa ricomparire il form. */}
                 {isSubmitted ? (
                     <div className="success-message">
                         <p>{form.success_message || 'Ti ringraziamo.'}</p>
@@ -69,6 +89,8 @@ export default function FormSection({tagline, headline, form, background_color, 
                         {form.fields.map((field) => (
                             <div className="form-group" key={field.id}>
                                 <label htmlFor={field.name}>{field.label}</label>
+                                {/* Solo il campo di tipo "textarea" usa
+                                    <textarea>, tutti gli altri <input>. */}
                                 {field.type === 'textarea' ? (
                                     <textarea
                                         id={field.name}
@@ -132,6 +154,7 @@ export default function FormSection({tagline, headline, form, background_color, 
                     line-height: 1.6;
                 }
 
+                /* La "card" bianca che contiene gli input. */
                 .contact-form {
                     background-color: #ffffff;
                     padding: 40px;
@@ -184,6 +207,8 @@ export default function FormSection({tagline, headline, form, background_color, 
                     background-color: #2b6cb0;
                 }
 
+                /* Quando il bottone e' disabilitato (invio in corso) si
+                   schiarisce e il cursore diventa "not-allowed". */
                 .submit-button:disabled {
                     background-color: #90cdf4;
                     cursor: not-allowed;

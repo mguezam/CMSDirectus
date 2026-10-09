@@ -6,13 +6,27 @@ import {useState, useEffect} from 'react';
 import {readItems} from '@directus/sdk';
 import client from '../../../lib/directus';
 
+// Blocco "Posts": mostra un elenco di articoli letti da Directus. E' un
+// componente client perche' i post vengono caricati dopo il render della
+// pagina (useEffect), non durante il render del server.
+//
+// tagline / headline:    testi introduttivi della sezione
+// limit:                 numero massimo di post da mostrare (default 6)
+// headline_color:        colore del titolo (da Directus)
+// background_color:      colore di sfondo della sezione (da Directus)
+// categoryName:          se presente, filtra i post per categoria
 export default function Posts({tagline, headline, limit = 6, headline_color, background_color, categoryName}) {
 
+    // posts e' null finche' il fetch non e' completato: serve a distinguere
+    // "sto ancora caricando" da "nessun risultato" (array vuoto).
     const [posts, setPosts] = useState(null);
-    console.log('Posts props:', {background_color});
+
     useEffect(() => {
         async function fetchPosts() {
             const filter = {published_at: {_nnull: true}};
+            // Solo i post pubblicati compaiono. Se e' indicata una categoria
+            // si aggiunge una seconda condizione (in Directus le condizioni
+            // nello stesso oggetto si sommano in AND).
             if (categoryName) {
                 filter.category = {Name: {_eq: categoryName}};
             }
@@ -20,6 +34,8 @@ export default function Posts({tagline, headline, limit = 6, headline_color, bac
             const data = await client.request(
                 readItems('posts', {
                     limit,
+                    // fields decide quali campi Directus restituisce.
+                    // image.title e image.id bastano per costruire l'URL.
                     fields: ['id', 'title', 'slug', {'author': ["first_name", "last_name"]}, 'published_at', 'image.title', 'image.id', 'description',
                         "background_color", "text_color", "category.Name", "category.slug"],
                     filter: filter,
@@ -38,8 +54,10 @@ export default function Posts({tagline, headline, limit = 6, headline_color, bac
             <div className="posts-container">
                 {posts ? (
                     <div className="posts-grid">
+                        {/* {...post} sparge i campi del post come props singole
+                            nel componente <Post>: equivale a scrivere una
+                            prop per ogni chiave. */}
                         {posts.map((post) => {
-                            console.log(post);
                             return <Post key={post.id} {...post} />;
                         })}
                     </div>
@@ -65,8 +83,8 @@ export default function Posts({tagline, headline, limit = 6, headline_color, bac
                     grid-template-columns: repeat(3, 1fr);
                     gap: 1rem;
                     width: 100%;
-                    max-width: 1400px; /* 👈 caps how wide the grid can get */
-                    margin: 0 auto; /* 👈 centers it horizontally */
+                    max-width: 1400px; /* limita la larghezza massima della griglia */
+                    margin: 0 auto; /* la centra orizzontalmente */
                 }
 
                 h1 {
@@ -86,6 +104,7 @@ export default function Posts({tagline, headline, limit = 6, headline_color, bac
     );
 }
 
+// Scheda singola di un post. Riceve gia' tutti i campi sparsi dal genitore.
 function Post({
                   id,
                   title,
@@ -101,6 +120,8 @@ function Post({
               }) {
     return (
         <div className={'card'} style={{'--background_color': background_color}}>
+            {/* L'immagine viene scaricata da Directus passando il token
+                nell'URL: stessa tecnica usata nel resto del sito. */}
             <Image
                 src={`http://localhost:8055/assets/${image.id}?access_token=${process.env.NEXT_PUBLIC_DIRECTUS_TOKEN}`}
                 alt={image.title}
@@ -113,6 +134,8 @@ function Post({
                 <p className={"category"}>{category?.Name}</p>
             </Link>
             <p className="author">by {author.first_name} {author.last_name}</p>
+            {/* Se il post ha "content" pieno mostra l'articolo intero, altrimenti
+                mostra la versione "card" con descrizione e link "Leggi di piu'". */}
             {content ? (
                 <>
                     <p>Published on {new Date(published_at).toDateString()}</p>
@@ -148,6 +171,8 @@ function Post({
                     flex: 1;
                 }
 
+                /* Troncamento della descrizione a 3 righe: -webkit-line-clamp
+                   e' il modo standard nei browser moderni. */
                 .card .description {
                     flex: 1;
                     display: -webkit-box;
@@ -160,6 +185,8 @@ function Post({
                     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
                 }
 
+                /* :global(img) perche' <Image> di Next genera un <img> che il
+                   CSS scoped non raggiungerebbe. */
                 .card :global(img) {
                     width: 100%;
                     height: 200px;
@@ -181,13 +208,6 @@ function Post({
 
                 .card .category {
                     font-size: 24px;
-                }
-
-                .card .description {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 3;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
                 }
 
                 .link {
