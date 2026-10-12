@@ -1,0 +1,48 @@
+.text-grid-section .text-grid{
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 60px 20px;
+                }
+
+                .text-grid-section{
+                    background-color: #181A1B;
+                }
+
+                .text-grid-section h2{
+                    font-size: 36px;
+                    margin-bottom: 30px;
+                    color: #E8E6E3;
+                }
+
+                /* 3 colonne e riempimento per colonna: i riquadri scendono in
+                   verticale e poi ripartono dalla colonna successiva. */
+                .text-grid-section .grid{
+                    display: grid;
+                    grid-template-columns: repeat(3,
+1fr);
+                    grid-template-rows: repeat(5,
+auto);
+                    grid-auto-flow: column;
+                    gap: 24px;
+                }
+
+                .text-grid-section .box{
+                    padding: 24px;
+                    background: #001E3E;
+                    border-radius: 8px;
+                }
+
+                .text-grid-section h3{
+                    margin: 0 0 10px;
+                    color: #E8E6E3;
+                }
+
+                .text-grid-section .box-link{
+                    text-decoration: none;
+                    color: #E8E6E3;
+                    display: inline-block;
+                }
+
+                .text-grid-section .box-link:hover{
+                    text-decoration: underline;
+                }

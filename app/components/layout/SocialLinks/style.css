@@ -1,0 +1,16 @@
+.social-links{
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                .social-links .socialLabel{
+                    color: var(--color,
+white);
+                }
+                .social-links a{
+                    display: inline-flex;
+                }
+
+                a:hover{
+                    opacity: 0.7;
+                }

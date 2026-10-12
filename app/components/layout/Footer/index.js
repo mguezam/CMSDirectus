@@ -1,4 +1,5 @@
 "use client";
+import "./style.css";
 
 // Piè di pagina a sezioni: ogni sezione ha un titolo, una linea sotto il titolo e
 // un testo (es. "Informazioni", linea, "Via Angelo Colombo..."), piu' una riga di
@@ -43,56 +44,7 @@ export default function Footer({ navigation }) {
                 </div>
             </div>
 
-            <style jsx>{`
-        .site-footer {
-          background-color: #2d3748;
-          color: #e2e8f0;
-          padding: 60px 0 30px;
-        }
-
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-
-        /* Le sezioni stanno in colonne: ognuna larga almeno 220px, e lo spazio
-           restante viene diviso in parti uguali. Su schermi stretti le colonne
-           diminuiscono da sole fino a una, senza bisogno di media query. */
-        .footer-content {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 40px;
-          margin-bottom: 40px;
-        }
-
-        .footer-title {
-          margin: 0 0 12px;
-          padding-bottom: 8px;
-          font-size: 18px;
-          font-weight: 700;
-          /* La linea sotto il titolo */
-          border-bottom: 1px solid #4a5568;
-        }
-
-        .footer-text {
-          margin: 0;
-          font-size: 15px;
-          line-height: 1.6;
-          color: #cbd5e0;
-          /* Conserva gli "a capo" scritti nel campo di testo di Directus (utile per
-             gli indirizzi su piu' righe) e manda a capo da solo le righe lunghe */
-          white-space: pre-line;
-        }
-
-        .footer-bottom {
-          text-align: center;
-          padding-top: 20px;
-          border-top: 1px solid #4a5568;
-          font-size: 14px;
-          color: #a0aec0;
-        }
-      `}</style>
+            
         </footer>
     );
 }

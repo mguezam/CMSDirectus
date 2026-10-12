@@ -1,0 +1,73 @@
+/* Il post e' un riquadro con sfondo proprio, cosi' il testo resta
+                   leggibile qualunque sia lo sfondo della pagina */
+                .post{
+                    max-width: 800px;
+                    margin: 40px auto;
+                    padding: 32px;
+                    background-color: var(--post_background_color,
+#ffffff);
+                    color: var(--post_text_color,
+#1a202c);
+                    border-radius: 8px;
+                }
+
+                .post .category{
+                    margin: 0 0 8px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    color: inherit;
+                }
+
+                .post h1{
+                    margin: 0 0 12px;
+                    font-size: 36px;
+                    line-height: 1.2;
+                    color: inherit;
+                }
+
+                .post .meta{
+                    margin: 0 0 24px;
+                    font-size: 14px;
+                    color: inherit;
+                }
+
+                .post .lead{
+                    margin: 24px 0;
+                    font-size: 20px;
+                    line-height: 1.6;
+                    color: inherit;
+                }
+
+                /* Covers both Next Image output and HTML rendered from Directus. */
+                .post img{
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 8px;
+                }
+
+                .post .content{
+                    line-height: 1.7;
+                    color: inherit;
+                }
+
+                .post .content h2,
+.post .content h3{
+                    margin: 32px 0 12px;
+                }
+
+                .post .content p{
+                    margin: 0 0 16px;
+                }
+
+                .post .content a{
+                    color: inherit;
+                    text-decoration: underline;
+                }
+
+                .post .content ul,
+.post .content ol{
+                    margin: 0 0 16px;
+                    padding-left: 24px;
+                }

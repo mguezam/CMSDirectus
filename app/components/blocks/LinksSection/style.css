@@ -1,0 +1,94 @@
+.links-section{
+                    padding: 60px 0;
+                    background-color: var(--links-background,
+#ffffff);
+                }
+
+                .links-section .container{
+                    max-width: 1400px;
+                    margin: 0 auto;
+                    padding: 0 40px;
+                }
+
+                .links-section h2{
+                    font-size: 28px;
+                    font-weight: bold;
+                    color: var(--links-text,
+#1a202c);
+                    margin-bottom: 30px;
+                }
+
+                .links-section .link-card:hover{
+                    border-color: #3182ce;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0,
+0,
+0,
+0.08);
+                    color: #3182ce;
+                }
+
+                /* Griglia a 4 colonne: le card occupano tutta la larghezza
+                   disponibile,
+come la griglia dei post. */
+                .links-section .links-row{
+                    display: grid;
+                    grid-template-columns: repeat(4,
+1fr);
+                    gap: 1rem;
+                    width: 100%;
+                }
+
+                /* Keep link-card styles scoped to this section. */
+                .links-section .links-row .link-card{
+                    padding: 20px;
+                    /* color-mix() crea uno sfondo traslucido che prende il
+                       colore del testo: funziona sia su sfondi chiari che
+                       scuri,
+senza dover scegliere un colore fisso. */
+                    background-color: color-mix(in srgb,
+var(--links-text,
+#2d3748) 8%,
+transparent);
+                    border: 1px solid color-mix(in srgb,
+var(--links-text,
+#2d3748) 20%,
+transparent);
+                    border-radius: 8px;
+                    text-decoration: none;
+                    color: var(--links-text,
+#2d3748);
+                    font-weight: 600;
+                    text-align: center;
+                    transition: background-color 0.2s,
+border-color 0.2s,
+transform 0.2s;
+                }
+
+                .links-section .links-row .link-card:hover{
+                    background-color: color-mix(in srgb,
+var(--links-text,
+#2d3748) 15%,
+transparent);
+                    border-color: color-mix(in srgb,
+var(--links-text,
+#2d3748) 40%,
+transparent);
+                    transform: translateY(-2px);
+                }
+
+                /* 4 colonne su desktop,
+2 su tablet,
+1 su mobile */
+                @media (max-width: 1024px){
+                    .links-section .links-row{
+                        grid-template-columns: repeat(2,
+1fr);
+                    }
+                }
+
+                @media (max-width: 600px){
+                    .links-section .links-row{
+                        grid-template-columns: 1fr;
+                    }
+                }

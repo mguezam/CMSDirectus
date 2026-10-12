@@ -1,11 +1,8 @@
-"use client";
-
 import Image from 'next/image';
+import "./style.css";
 
 // Disegna un singolo post: categoria, titolo, autore e data, immagine e testo.
-// E' un componente client perche' usa styled-jsx (<style jsx>), che funziona solo
-// nei componenti client. La pagina che lo usa resta un componente server e gli
-// passa il post gia' caricato.
+// La pagina che lo usa resta un componente server e gli passa il post gia' caricato.
 //
 // post: il post letto da Directus con getPostBySlug
 export default function PostArticle({post}) {
@@ -61,81 +58,7 @@ export default function PostArticle({post}) {
                 del sito, ma non andrebbe mai usato con testo scritto da visitatori. */}
             {content && <div className="content" dangerouslySetInnerHTML={{__html: content}}/>}
 
-            <style jsx>{`
-                /* Il post e' un riquadro con sfondo proprio, cosi' il testo resta
-                   leggibile qualunque sia lo sfondo della pagina */
-                .post {
-                    max-width: 800px;
-                    margin: 40px auto;
-                    padding: 32px;
-                    background-color: var(--post_background_color, #ffffff);
-                    color: var(--post_text_color, #1a202c);
-                    border-radius: 8px;
-                }
-
-                .category {
-                    margin: 0 0 8px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                    color: inherit;
-                }
-
-                h1 {
-                    margin: 0 0 12px;
-                    font-size: 36px;
-                    line-height: 1.2;
-                    color: inherit;
-                }
-
-                .meta {
-                    margin: 0 0 24px;
-                    font-size: 14px;
-                    color: inherit;
-                }
-
-                .lead {
-                    margin: 24px 0;
-                    font-size: 20px;
-                    line-height: 1.6;
-                    color: inherit;
-                }
-
-                /* :global() serve perche' questi elementi (immagini, paragrafi, link...)
-                   non sono scritti qui in JSX: li crea il componente Image o arrivano
-                   dall'HTML di Directus, e una regola "scoped" non li raggiungerebbe */
-                .post :global(img) {
-                    max-width: 100%;
-                    height: auto;
-                    border-radius: 8px;
-                }
-
-                .content {
-                    line-height: 1.7;
-                    color: inherit;
-                }
-
-                .content :global(h2),
-                .content :global(h3) {
-                    margin: 32px 0 12px;
-                }
-
-                .content :global(p) {
-                    margin: 0 0 16px;
-                }
-
-                .content :global(a) {
-                    color: inherit;
-                    text-decoration: underline;
-                }
-
-                .content :global(ul),
-                .content :global(ol) {
-                    margin: 0 0 16px;
-                    padding-left: 24px;
-                }
-            `}</style>
+            
         </article>
     );
 }

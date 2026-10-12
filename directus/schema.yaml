@@ -240,6 +240,32 @@ collections:
       versioning: false
     schema:
       name: block_hero
+  - collection: block_links
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: archived
+      archive_value: 'true'
+      autosave_revision_interval: null
+      collapse: open
+      collection: block_links
+      color: null
+      display_template: null
+      group: blocks
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 1
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: 'false'
+      versioning: false
+    schema:
+      name: block_links
   - collection: block_posts
     meta:
       accountability: all
@@ -378,32 +404,6 @@ collections:
       versioning: false
     schema:
       name: block_richtext
-  - collection: block_searchbar
-    meta:
-      accountability: all
-      archive_app_filter: true
-      archive_field: null
-      archive_value: null
-      autosave_revision_interval: null
-      collapse: open
-      collection: block_searchbar
-      color: null
-      display_template: null
-      group: blocks
-      hidden: false
-      icon: null
-      item_duplication_fields: null
-      note: null
-      preview_url: null
-      singleton: false
-      sort: 1
-      sort_field: null
-      status: active
-      translations: null
-      unarchive_value: null
-      versioning: false
-    schema:
-      name: block_searchbar
   - collection: block_textgrid
     meta:
       accountability: all
@@ -472,7 +472,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 3
       sort_field: sort
       status: active
       translations: null
@@ -4218,6 +4218,275 @@ fields:
       validation: null
       validation_message: null
       width: full
+  - collection: block_links
+    field: id
+    type: integer
+    meta:
+      collection: block_links
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: block_links
+      data_type: integer
+      default_value: nextval('block_links_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: block_links
+    field: archived
+    type: boolean
+    meta:
+      collection: block_links
+      conditions: null
+      display: boolean
+      display_options:
+        colorOff: transparent
+        colorOn: var(--theme--foreground-subdued)
+        iconOff: unarchive
+        iconOn: archive
+        labelOff: $t:not_archived
+        labelOn: $t:archived
+      field: archived
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: archived
+      table: block_links
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: block_links
+    field: title
+    type: string
+    meta:
+      collection: block_links
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        placeholder: Title
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: block_links
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: block_links
+    field: items
+    type: json
+    meta:
+      collection: block_links
+      conditions: null
+      display: null
+      display_options: null
+      field: items
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: label
+            meta:
+              field: label
+              interface: input
+              options:
+                placeholder: Inserisci testo da visualizzare
+              required: true
+              type: string
+            name: label
+            type: string
+          - field: url
+            meta:
+              field: url
+              interface: input
+              options:
+                placeholder: Inserisci l'URL da associare al testo
+              type: string
+            name: url
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: items
+      table: block_links
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: block_links
+    field: background_color
+    type: string
+    meta:
+      collection: block_links
+      conditions: null
+      display: null
+      display_options: null
+      field: background_color
+      group: null
+      hidden: false
+      interface: select-color
+      note: null
+      options: {}
+      readonly: false
+      required: true
+      searchable: true
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: background_color
+      table: block_links
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: block_links
+    field: text_color
+    type: string
+    meta:
+      collection: block_links
+      conditions: null
+      display: null
+      display_options: null
+      field: text_color
+      group: null
+      hidden: false
+      interface: select-color
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: text_color
+      table: block_links
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: block_posts
     field: id
     type: uuid
@@ -6280,86 +6549,6 @@ fields:
       table: block_richtext
       data_type: character varying
       default_value: '#FFFFFF'
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: block_searchbar
-    field: id
-    type: integer
-    meta:
-      collection: block_searchbar
-      conditions: null
-      display: null
-      display_options: null
-      field: id
-      group: null
-      hidden: true
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 1
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: id
-      table: block_searchbar
-      data_type: integer
-      default_value: nextval('block_searchbar_id_seq'::regclass)
-      max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
-      is_nullable: false
-      is_unique: true
-      is_indexed: false
-      is_primary_key: true
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: true
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: block_searchbar
-    field: search_placeholder
-    type: string
-    meta:
-      collection: block_searchbar
-      conditions: null
-      display: null
-      display_options: null
-      field: search_placeholder
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 2
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: search_placeholder
-      table: block_searchbar
-      data_type: character varying
-      default_value: null
       max_length: 255
       numeric_precision: null
       numeric_scale: null
@@ -11250,7 +11439,7 @@ fields:
       display: null
       display_options: null
       field: search_enabled
-      group: null
+      group: header_settings
       hidden: false
       interface: boolean
       note: null
@@ -11258,7 +11447,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 4
       special:
         - cast-boolean
       translations: null
@@ -11331,7 +11520,7 @@ fields:
       display: null
       display_options: null
       field: height
-      group: null
+      group: header_settings
       hidden: false
       interface: input
       note: null
@@ -11343,7 +11532,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 2
       special: null
       translations: null
       validation: null
@@ -11383,7 +11572,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 12
       special:
         - file
       translations: null
@@ -11416,7 +11605,7 @@ fields:
       display: null
       display_options: null
       field: top_bar_color
-      group: null
+      group: header_settings
       hidden: false
       interface: select-color
       note: null
@@ -11424,7 +11613,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 3
       special: null
       translations: null
       validation: null
@@ -11456,7 +11645,7 @@ fields:
       display: null
       display_options: null
       field: social_links
-      group: null
+      group: header_settings
       hidden: false
       interface: list
       note: null
@@ -11494,7 +11683,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 1
       special:
         - cast-json
       translations: null
@@ -11541,7 +11730,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 13
       special:
         - alias
         - no-data
@@ -11646,7 +11835,7 @@ fields:
       display: null
       display_options: null
       field: search_bar_settings
-      group: null
+      group: header_settings
       hidden: false
       interface: group-detail
       note: null
@@ -11654,7 +11843,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 5
       special:
         - alias
         - no-data
@@ -11743,6 +11932,99 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: navigation
+    field: footer_sections
+    type: json
+    meta:
+      collection: navigation
+      conditions: null
+      display: null
+      display_options: null
+      field: footer_sections
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: title
+            meta:
+              field: title
+              interface: input
+              note: Inserisci titolo della sezione
+              required: true
+              type: string
+            name: title
+            type: string
+          - field: content
+            meta:
+              field: content
+              interface: input
+              note: Inserisci contenuto della sezione
+              required: true
+              type: string
+            name: content
+            type: string
+        template: '{{title}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: footer_sections
+      table: navigation
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: navigation
+    field: header_settings
+    type: alias
+    meta:
+      collection: navigation
+      conditions:
+        - hidden: true
+          name: Hide on footer
+          rule:
+            _and:
+              - title:
+                  _icontains: footer
+      display: null
+      display_options: null
+      field: header_settings
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: navigation_items
     field: id
     type: uuid
@@ -13888,7 +14170,7 @@ fields:
         min: 14
         placeholder: Inserisci la grandezza del breadcrumb
       readonly: false
-      required: false
+      required: true
       searchable: true
       sort: 2
       special: null
@@ -17068,6 +17350,7 @@ relations:
         - block_gallery
         - block_pricing
         - block_textgrid
+        - block_links
       one_collection: null
       one_collection_field: collection
       one_deselect_action: nullify

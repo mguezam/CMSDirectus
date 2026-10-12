@@ -1,6 +1,6 @@
 import {notFound} from 'next/navigation';
 import {getPostBySlug, getNavigation} from '@/lib/pages';
-import Index from '@/app/components/layout/Header';
+import Header from '@/app/components/layout/Header';
 import Footer from '@/app/components/layout/Footer';
 import PostArticle from '@/app/components/PostArticle';
 
@@ -39,7 +39,7 @@ export default async function PostPage({params}) {
 
     return (
         <main style={{minHeight: '100vh'}}>
-            <Index navigation={navigationData}/>
+            <Header navigation={navigationData}/>
             <PostArticle post={post}/>
             <Footer navigation={navigationData}/>
         </main>

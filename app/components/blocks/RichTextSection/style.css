@@ -1,0 +1,79 @@
+.rich-text-section{
+                    background-color: var(--richtext-background,
+#151515);
+                    padding: 80px 0;
+                }
+
+                .rich-text-section .container{
+                    max-width: 900px;
+                    margin: 0 auto;
+                    padding: 0 20px;
+                }
+
+                .rich-text-section .tagline{
+                    font-size: 18px;
+                    color: var(--tagline-color,
+#151515);
+                    margin-bottom: 10px;
+                }
+
+                .rich-text-section h2{
+                    font-size: 36px;
+                    font-weight: bold;
+                    margin-bottom: 30px;
+                    color: var(--headline-color,
+#151515);
+                }
+
+                .rich-text-section .content{
+                    font-size: 18px;
+                    line-height: 1.7;
+                    color: var(--content-color,
+#151515);
+                }
+
+                /* These descendants are generated from the rich-text HTML. */
+                .rich-text-section .content a{
+                    color: #3182ce;
+                    text-decoration: underline;
+                    transition: color 0.15s;
+                }
+
+                .rich-text-section .content a:hover{
+                    color: #2b6cb0;
+                }
+
+                .rich-text-section .content p{
+                    margin-bottom: 20px;
+                }
+
+                /* h3 iniettati dal contenuto usano lo stesso colore del testo.
+                   Non c'e' un selettore h3 "semplice": quello non raggiungerebbe
+                   gli h3 iniettati. */
+                .rich-text-section .content h3{
+                    font-size: 24px;
+                    margin-top: 40px;
+                    margin-bottom: 20px;
+                    color: var(--content-color,
+#151515);
+                }
+
+                .rich-text-section .content ul,
+.rich-text-section .content ol{
+                    margin-bottom: 20px;
+                    padding-left: 20px;
+                }
+
+                .rich-text-section .content li{
+                    margin-bottom: 10px;
+                }
+
+                @media (max-width: 768px){
+                    .rich-text-section h2{
+                        font-size: 30px;
+                    }
+
+                    .rich-text-section .content{
+                        font-size: 16px;
+                    }
+                }

@@ -1,0 +1,115 @@
+.pricing-section{
+                    padding: 80px 0;
+                    background-color: #ffffff;
+                }
+
+                .pricing-section .container{
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 20px;
+                }
+
+                .pricing-section .pricing-header{
+                    text-align: center;
+                    margin-bottom: 60px;
+                }
+
+                .pricing-section .tagline{
+                    font-size: 18px;
+                    color: #718096;
+                    margin-bottom: 10px;
+                }
+
+                .pricing-section h2{
+                    font-size: 36px;
+                    font-weight: bold;
+                    color: #1a202c;
+                    margin-bottom: 20px;
+                }
+
+                .pricing-section .pricing-plans{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 30px;
+                }
+
+                .pricing-section .pricing-plan{
+                    background-color: #f7fafc;
+                    border-radius: 8px;
+                    padding: 40px;
+                    width: 300px;
+                    box-shadow: 0 4px 6px rgba(0,
+0,
+0,
+0.05);
+                    transition: transform 0.3s;
+                    position: relative;
+                }
+
+                .pricing-section .pricing-plan:hover{
+                    transform: translateY(-10px);
+                }
+
+                /* Il piano "in evidenza" ha sfondo azzurro,
+bordo blu e ombra piu'
+                   marcata per attirare l'attenzione. */
+                .pricing-section .pricing-plan.featured{
+                    background-color: #ebf8ff;
+                    box-shadow: 0 8px 30px rgba(0,
+0,
+0,
+0.1);
+                    border: 2px solid #3182ce;
+                    z-index: 1;
+                }
+
+                .pricing-section h3{
+                    font-size: 24px;
+                    font-weight: 600;
+                    color: #2d3748;
+                    margin-bottom: 15px;
+                }
+
+                .pricing-section .price{
+                    font-size: 48px;
+                    font-weight: 700;
+                    color: #1a202c;
+                    margin-bottom: 20px;
+                }
+
+                .pricing-section .plan-description{
+                    font-size: 16px;
+                    color: #4a5568;
+                    margin-bottom: 30px;
+                    line-height: 1.5;
+                }
+
+                .pricing-section .features{
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0 0 30px;
+                }
+
+                .pricing-section .features li{
+                    padding: 8px 0;
+                    font-size: 16px;
+                    color: #4a5568;
+                    display: flex;
+                    align-items: center;
+                }
+
+                /* Spunta davanti a ogni voce dell'elenco caratteristiche. */
+                .pricing-section .features li:before{
+                    content: "✓";
+                    color: #38a169;
+                    font-weight: bold;
+                    margin-right: 10px;
+                }
+
+                @media (max-width: 768px){
+                    .pricing-section .pricing-plan{
+                        width: 100%;
+                        max-width: 400px;
+                    }
+                }

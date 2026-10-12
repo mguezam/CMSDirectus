@@ -1,15 +1,22 @@
-"use client";
-
 import Link from 'next/link';
 import HeaderSearch from '../HeaderSearch';
 import Image from "next/image";
 import SocialLinks from '../SocialLinks';
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+} from '@/components/ui/navigation-menu';
+import "./style.css";
 
-// Index del sito, su due righe: in alto logo, nome e (a destra) social e ricerca;
+// Header del sito, su due righe: in alto logo, nome e (a destra) social e ricerca;
 // sotto la barra con il menu principale. Colori e altezza sono impostabili in Directus.
 //
 // navigation: tutti i menu letti da Directus; qui si usa quello "Main Navigation"
-export default function Index({navigation}) {
+export default function Header({navigation}) {
     // Si cerca tra i menu quello con titolo "Main Navigation"
     const headerNavigation = navigation.filter((nav) => nav.title === 'Main Navigation')[0];
 
@@ -30,7 +37,11 @@ export default function Index({navigation}) {
     const socialLinksColor = headerNavigation.social_links_color;  // colore di quella scritta
 
     return (
-        <header className="site-header">
+        <header className="site-header" style={{
+            "--header-height": `${height ?? 80}px`,
+            "--header-top-bar-color": topBarColor ?? '#ffffff',
+            "--header-nav-bar-color": backgroundColor ?? '#ffffff',
+        }}>
             {/* Riga superiore */}
             <div className="top-bar">
                 <div className="container top-container">
@@ -50,7 +61,7 @@ export default function Index({navigation}) {
                                 style={{objectFit: 'contain', width: 'auto', height: 'auto'}}
                             />
                         )}
-                        <Link href="/directus-next-cms/public">
+                        <Link href="/">
                             {/* Il nome del sito e' scritto direttamente nel codice, non viene
                                 da Directus */}
                             <span className="logo-text">Consorzio di Bonifica Adige Po</span>
@@ -72,183 +83,16 @@ export default function Index({navigation}) {
             {/* Riga inferiore: il menu principale */}
             <nav className="nav-bar">
                 <div className="container nav-container">
-                    <div className="main-nav">
+                    <NavigationMenu aria-label="Main navigation" viewport={false} className="w-full max-w-none justify-start">
+                    <NavigationMenuList className="main-nav justify-start gap-6">
                         {headerNavigation.items.map((item) => (
                             <NavigationItem key={item.id} item={item}/>
                         ))}
-                    </div>
+                    </NavigationMenuList>
+                    </NavigationMenu>
                 </div>
             </nav>
 
-            {/* Stile "scoped": le regole valgono solo per gli elementi scritti in questo
-                componente. Le espressioni ${...} inseriscono nel CSS i valori letti da
-                Directus, con una riserva (dopo "??") se il campo e' vuoto. */}
-            <style jsx>{`
-                /* Index sempre visibile in alto anche scorrendo la pagina */
-                .site-header {
-                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                    position: sticky;
-                    top: 0;
-                    z-index: 100;
-                }
-
-                /* Colonna centrale: parte comune alle due righe. Usa flex per
-                   centrare verticalmente il contenuto. */
-                .container {
-                    max-width: 1400px;
-                    margin: 0 auto;
-                    padding: 0 20px;
-                    display: flex;
-                    align-items: center;
-                }
-
-                /* L'altezza della riga in alto viene da Directus (default 80px) */
-                .top-container {
-                    height: ${height ?? 80}px;
-                    justify-content: space-between;
-                }
-
-                .top-bar {
-                    background-color: ${topBarColor ?? '#ffffff'};
-                }
-
-                .nav-bar {
-                    background-color: ${backgroundColor ?? '#ffffff'};
-                }
-
-                .nav-container {
-                    height: 48px;
-                    justify-content: flex-start;
-                }
-
-                /* Social e ricerca impilati verticalmente e allineati a destra */
-                .top-right {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-end;
-                    gap: 8px;
-                }
-
-                .logo {
-                    display: flex;
-                    font-size: 25px;
-                    font-weight: 700;
-                    align-items: center;
-                    flex-shrink: 1;
-                    min-width: 0;
-                    gap: 20px;
-                }
-
-                .logo-text {
-                    color: #3182ce;
-                    text-decoration: none;
-                }
-
-                /* Schermi stretti: le due parti dell'header si dispongono in colonna e
-                   l'altezza fissa viene sostituita da quella automatica */
-                @media (max-width: 768px) {
-                    .container {
-                        flex-direction: column;
-                        height: auto;
-                        padding: 20px;
-                    }
-
-                    .logo {
-                        margin-bottom: 20px;
-                    }
-
-                }
-            `}</style>
-            {/* Stile "global": queste regole valgono per tutta la pagina, e servono
-                perche' gli elementi del menu sono scritti nelle funzioni qui sotto e
-                nei componenti Link. I nomi delle classi (nav-..., main-nav) sono
-                abbastanza specifici da non toccare altro. */}
-            <style jsx global>{`
-                .nav-dropdown {
-                    /* Il pannello a tendina si posiziona rispetto a questo elemento */
-                    position: relative;
-                }
-
-                /* Titolo del menu a tendina; --item-color e' impostata in linea da
-                   DropdownItem, il grigio e' la riserva */
-                .nav-dropdown-trigger {
-                    color: var(--item-color, #4a5568);
-                    font-size: 16px;
-                    font-weight: 500;
-                    cursor: pointer;
-                    white-space: nowrap;
-                }
-
-                .nav-dropdown:hover .nav-dropdown-trigger {
-                    color: #3182ce;
-                }
-
-                /* Pannello a tendina: nascosto finche' non si passa il mouse. Sta fuori dal
-                   flusso (absolute) e sotto il titolo (top: 100%). */
-                .nav-dropdown-panel {
-                    display: none;
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    gap: 40px;
-                    min-width: 400px;
-                    padding: 20px;
-                    background: #ffffff;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                    border-radius: 6px;
-                }
-
-                /* Al passaggio del mouse il pannello diventa visibile, con le colonne
-                   una accanto all'altra (flex). Funziona solo con il mouse: su touch
-                   non c'e' hover. */
-                .nav-dropdown:hover .nav-dropdown-panel {
-                    display: flex;
-                }
-
-                /* Ogni sottogruppo e' una colonna con titolo e link impilati */
-                .nav-column {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-                }
-
-                .nav-column-title {
-                    font-weight: 700;
-                    color: #1a202c;
-                    margin: 0 0 4px;
-                }
-
-                .nav-column a {
-                    color: var(--item-color, #4a5568);
-                    text-decoration: none;
-                }
-
-                .nav-column a:hover {
-                    color: #3182ce;
-                }
-
-                .main-nav {
-                    display: flex;
-                    align-items: center;
-                    list-style: none;
-                    margin: 0;
-                    padding: 0;
-                    gap: 24px;
-                }
-
-                .main-nav a {
-                    color: var(--item-color, #4a5568);
-                    text-decoration: none;
-                    font-size: 16px;
-                    font-weight: 500;
-                    transition: color 0.3s;
-                    white-space: nowrap;
-                }
-                .main-nav a:hover {
-                    color: #3182ce;
-                }
-            `}</style>
         </header>
     );
 }
@@ -256,21 +100,26 @@ export default function Index({navigation}) {
 // Voce di primo livello: un gruppo diventa un menu a tendina, qualsiasi altra
 // cosa e' un semplice link
 function NavigationItem({item}) {
-    if (item.type === 'group') {
-        return <DropdownItem item={item}/>;
-    }
-    return <NavLink item={item}/>;
+    return (
+        <NavigationMenuItem className="nav-item" style={{'--item-color': item.element_color}}>
+            {item.type === 'group' ? <DropdownItem item={item}/> : <NavLink item={item} topLevel/>}
+        </NavigationMenuItem>
+    );
 }
 
 // Menu a tendina: i figli che sono a loro volta gruppi diventano colonne
 // verticali del pannello. Disegna solo due livelli (gruppo e sottogruppi).
 function DropdownItem({item}) {
     return (
-        <div className="nav-dropdown">
-            {/* --item-color e' una variabile CSS assegnata qui in linea con il colore
-                scelto in Directus, e letta nel CSS globale con var() */}
-            <span className="nav-dropdown-trigger" style={{'--item-color': item.element_color}}>{item.title}</span>
-            <div className="nav-dropdown-panel">
+        <>
+            <NavigationMenuTrigger
+                className="nav-dropdown-trigger text-base text-white hover:bg-transparent hover:text-[#3182ce]"
+                style={{color: '#ffffff'}}
+            >
+                {item.title}
+            </NavigationMenuTrigger>
+            <NavigationMenuContent className="nav-dropdown-panel absolute left-0 top-full min-w-[400px] bg-white p-5 shadow-lg">
+                <div className="nav-columns">
                 {item.children?.map((child) =>
                     child.type === 'group' ? (
                         // Sottogruppo: colonna con il titolo e i suoi link
@@ -287,25 +136,39 @@ function DropdownItem({item}) {
                         </div>
                     )
                 )}
-            </div>
-        </div>
+                </div>
+            </NavigationMenuContent>
+        </>
     );
 }
 
 // Un singolo link del menu. Il div esterno serve solo a portare il colore della
 // voce (--item-color) fino al tag <a>, che lo eredita.
-function NavLink({item}) {
+function NavLink({item, topLevel = false}) {
+    const link = (
+        <Link
+            href={resolveItemUrl(item)}
+            target={item.target === '_blank' ? '_blank' : undefined}
+            rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
+            className={topLevel ? undefined : "text-[var(--item-color,#4a5568)] hover:text-[#3182ce]"}
+            style={topLevel ? {color: '#ffffff'} : undefined}
+        >
+            {item.title}
+        </Link>
+    );
+
     return (
         <div style={{'--item-color': item.element_color}}>
             {/* Se la voce e' impostata per aprirsi in una nuova scheda, noopener
                 noreferrer protegge la pagina originale */}
-            <Link
-                href={resolveItemUrl(item)}
-                target={item.target === '_blank' ? '_blank' : undefined}
-                rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
-            >
-                {item.title}
-            </Link>
+            {topLevel ? (
+                <NavigationMenuLink
+                    asChild
+                    className="text-base font-medium text-white hover:bg-transparent hover:text-[#3182ce]"
+                >
+                    {link}
+                </NavigationMenuLink>
+            ) : link}
         </div>
     );
 }

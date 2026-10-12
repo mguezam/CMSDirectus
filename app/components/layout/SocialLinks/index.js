@@ -1,4 +1,5 @@
 import Image from "next/image";
+import "./style.css";
 
 // Riga con la scritta (es. "Seguici su") e le icone dei social, usata nella barra
 // superiore dell'header.
@@ -37,23 +38,7 @@ export default function SocialLinks({links, label, color}) {
                 </a>
             ))}
 
-            <style jsx>{`
-                .social-links {
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                }
-                .socialLabel {
-                    color: var(--color, white);
-                }
-                a {
-                    display: inline-flex;
-                }
-
-                a:hover {
-                    opacity: 0.7;
-                }
-            `}</style>
+            
         </div>
     );
 }

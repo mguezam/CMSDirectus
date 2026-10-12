@@ -1,6 +1,6 @@
-"use client";
-
 import Link from "next/link"
+import {Card} from '@/components/ui/card';
+import "./style.css";
 
 // Blocco "Text Grid": griglia di riquadri, ognuno con un titolo cliccabile
 // che porta a una pagina interna o a un sito esterno.
@@ -19,7 +19,7 @@ export default function TextGridSection({headline, items = []}) {
                         // in quel caso il titolo non diventa un link.
                         const link = resolveHref(item.url);
                         return (
-                            <div key={idx} className="box">
+                            <Card key={idx} className="box gap-0 py-6">
                                 {link ? (
                                     <Link
                                         href={link.href}
@@ -35,60 +35,13 @@ export default function TextGridSection({headline, items = []}) {
                                 ) : (
                                     <h3 className="box-link">{item.title}</h3>
                                 )}
-                            </div>
+                            </Card>
                         );
                     })}
                 </div>
             </div>
 
-            <style jsx>{`
-                .text-grid {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 60px 20px;
-                }
-
-                .text-grid-section {
-                    background-color: #181A1B;
-                }
-
-                h2 {
-                    font-size: 36px;
-                    margin-bottom: 30px;
-                    color: #E8E6E3;
-                }
-
-                /* 3 colonne e riempimento per colonna: i riquadri scendono in
-                   verticale e poi ripartono dalla colonna successiva. */
-                .grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    grid-template-rows: repeat(5, auto);
-                    grid-auto-flow: column;
-                    gap: 24px;
-                }
-
-                .box {
-                    padding: 24px;
-                    background: #001E3E;
-                    border-radius: 8px;
-                }
-
-                h3 {
-                    margin: 0 0 10px;
-                    color: #E8E6E3;
-                }
-
-                .box-link {
-                    text-decoration: none;
-                    color: #E8E6E3;
-                    display: inline-block;
-                }
-
-                .box-link:hover {
-                    text-decoration: underline;
-                }
-            `}</style>
+            
         </section>
     );
 
