@@ -1,17 +1,21 @@
 "use client";
 
-import Link from 'next/link';
-
-// Piè di pagina: disegna le voci del menu "Footer Navigation" e una riga di
-// copyright.
+// Piè di pagina a sezioni: ogni sezione ha un titolo, una linea sotto il titolo e
+// un testo (es. "Informazioni", linea, "Via Angelo Colombo..."), piu' una riga di
+// copyright. Le sezioni si gestiscono in Directus, nel campo "footer_sections"
+// della voce di menu "Footer Navigation".
 //
 // navigation: tutti i menu letti da Directus (lo stesso elenco dato all'header)
 export default function Footer({ navigation }) {
     // Si cerca tra i menu quello con titolo "Footer Navigation"
     const footerNavigation = navigation?.filter((nav) => nav.title === 'Footer Navigation')[0];
 
-    // Se il menu non esiste o non ha voci, il footer non viene mostrato affatto
-    if (!footerNavigation || !footerNavigation.items?.length) {
+    // Il repeater di Directus arriva come elenco di { title, content }. Se il campo
+    // e' vuoto arriva null, quindi "?? []" lo trasforma in un elenco vuoto.
+    const sections = footerNavigation?.footer_sections ?? [];
+
+    // Nessuna sezione: il footer non viene mostrato affatto
+    if (sections.length === 0) {
         return null;
     }
 
@@ -19,8 +23,15 @@ export default function Footer({ navigation }) {
         <footer className="site-footer">
             <div className="container">
                 <div className="footer-content">
-                    {footerNavigation.items.map((item) => (
-                        <FooterNavigationItem key={item.id} item={item} />
+                    {sections.map((section, idx) => (
+                        // Le voci di un repeater non hanno un id, quindi come "key"
+                        // (che React richiede in ogni elenco) si usa la posizione
+                        <div key={idx} className="footer-section">
+                            {/* La linea sotto il titolo e' il bordo inferiore del titolo */}
+                            <h3 className="footer-title">{section.title}</h3>
+                            {/* Il paragrafo si mostra solo se la sezione ha un testo */}
+                            {section.content && <p className="footer-text">{section.content}</p>}
+                        </div>
                     ))}
                 </div>
 
@@ -28,7 +39,7 @@ export default function Footer({ navigation }) {
                     {/* Il testo "Your Site" e' scritto direttamente nel codice (non
                         viene da Directus): per cambiarlo va modificato qui. L'anno e'
                         calcolato in automatico. */}
-                    <p>&copy; {new Date().getFullYear()} Your Site. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} AdigePo. All rights reserved.</p>
                 </div>
             </div>
 
@@ -45,12 +56,33 @@ export default function Footer({ navigation }) {
           padding: 0 20px;
         }
 
+        /* Le sezioni stanno in colonne: ognuna larga almeno 220px, e lo spazio
+           restante viene diviso in parti uguali. Su schermi stretti le colonne
+           diminuiscono da sole fino a una, senza bisogno di media query. */
         .footer-content {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 40px;
           margin-bottom: 40px;
-          gap: 20px;
+        }
+
+        .footer-title {
+          margin: 0 0 12px;
+          padding-bottom: 8px;
+          font-size: 18px;
+          font-weight: 700;
+          /* La linea sotto il titolo */
+          border-bottom: 1px solid #4a5568;
+        }
+
+        .footer-text {
+          margin: 0;
+          font-size: 15px;
+          line-height: 1.6;
+          color: #cbd5e0;
+          /* Conserva gli "a capo" scritti nel campo di testo di Directus (utile per
+             gli indirizzi su piu' righe) e manda a capo da solo le righe lunghe */
+          white-space: pre-line;
         }
 
         .footer-bottom {
@@ -60,65 +92,7 @@ export default function Footer({ navigation }) {
           font-size: 14px;
           color: #a0aec0;
         }
-
-        /* Su schermi stretti le voci si dispongono in colonna */
-        @media (max-width: 768px) {
-          .footer-content {
-            flex-direction: column;
-          }
-        }
       `}</style>
         </footer>
     );
-}
-
-// Disegna una voce del footer. Un gruppo non viene mostrato come titolo: si
-// disegnano direttamente i suoi figli, uno dopo l'altro. Non e' ricorsivo per
-// davvero: scende di un solo livello.
-function FooterNavigationItem({ item }) {
-    if (item.type === 'group') {
-        return (
-            item.children?.map((child) => (
-                // target/rel: se la voce e' impostata per aprirsi in una nuova
-                // scheda, noopener noreferrer protegge la pagina originale.
-                // Attenzione: qui si usa child.label, mentre per le voci normali
-                // piu' sotto si usa item.title. Se il testo di un figlio non
-                // compare, controllare quale dei due campi esiste davvero.
-                <Link
-                    href={resolveItemUrl(child)} key={child.id}
-                    target={child.target === '_blank' ? '_blank' : undefined}
-                    rel={child.target === '_blank' ? 'noopener noreferrer' : undefined}
-                >
-                    {child.label}
-                </Link>
-            ))
-        );
-    }
-
-    // Se non e' un gruppo, la voce e' un singolo link
-    return (
-        <Link
-            href={resolveItemUrl(item)}
-            target={item.target === '_blank' ? '_blank' : undefined}
-            rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
-        >
-            {item.title}
-        </Link>
-    );
-}
-
-// Calcola la destinazione di una voce in base al suo tipo: pagina, post o URL
-// libero. Per le pagine il permalink contiene gia' la "/" iniziale. Se manca
-// il dato necessario si restituisce "#" (un link che non porta da nessuna parte).
-function resolveItemUrl(item) {
-    if (item.type === 'page' && item.page) {
-        return `${item.page.permalink}`;
-    }
-    if (item.type === 'post' && item.post) {
-        return `/posts/${item.post}`;
-    }
-    if (item.type === 'url' && item.url) {
-        return item.url;
-    }
-    return '#';
 }

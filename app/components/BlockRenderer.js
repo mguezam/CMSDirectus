@@ -43,6 +43,8 @@ export default function BlockRenderer({blocks = [], categoryName}) {
                 // Tipo di blocco sconosciuto: non si disegna nulla invece di
                 // far andare in errore la pagina
                 if (!Component) return null;
+                //AGGIUNGI FILTER CONTROLLO PRIMA DI PRESENZA BLOCCO
+
 
                 // categoryName non e' un campo del blocco in Directus (viene dalla
                 // rotta), quindi non arriva con block.item. Va passato a mano, e

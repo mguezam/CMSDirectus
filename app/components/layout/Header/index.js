@@ -1,15 +1,15 @@
 "use client";
 
 import Link from 'next/link';
-import HeaderSearch from './HeaderSearch';
+import HeaderSearch from '../HeaderSearch';
 import Image from "next/image";
-import SocialLinks from './SocialLinks';
+import SocialLinks from '../SocialLinks';
 
-// Header del sito, su due righe: in alto logo, nome e (a destra) social e ricerca;
+// Index del sito, su due righe: in alto logo, nome e (a destra) social e ricerca;
 // sotto la barra con il menu principale. Colori e altezza sono impostabili in Directus.
 //
 // navigation: tutti i menu letti da Directus; qui si usa quello "Main Navigation"
-export default function Header({navigation}) {
+export default function Index({navigation}) {
     // Si cerca tra i menu quello con titolo "Main Navigation"
     const headerNavigation = navigation.filter((nav) => nav.title === 'Main Navigation')[0];
 
@@ -50,7 +50,7 @@ export default function Header({navigation}) {
                                 style={{objectFit: 'contain', width: 'auto', height: 'auto'}}
                             />
                         )}
-                        <Link href="/">
+                        <Link href="/directus-next-cms/public">
                             {/* Il nome del sito e' scritto direttamente nel codice, non viene
                                 da Directus */}
                             <span className="logo-text">Consorzio di Bonifica Adige Po</span>
@@ -84,7 +84,7 @@ export default function Header({navigation}) {
                 componente. Le espressioni ${...} inseriscono nel CSS i valori letti da
                 Directus, con una riserva (dopo "??") se il campo e' vuoto. */}
             <style jsx>{`
-                /* Header sempre visibile in alto anche scorrendo la pagina */
+                /* Index sempre visibile in alto anche scorrendo la pagina */
                 .site-header {
                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
                     position: sticky;

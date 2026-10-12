@@ -122,7 +122,7 @@ app/
   category/[slug]/page.js    pagine di categoria
   posts/[slug]/page.js       singolo articolo
   components/
-    layout/                  Header, Footer, Breadcrumb, ...
+    layout/                  Index, Footer, Breadcrumb, ...
     blocks/                  blocchi del page builder
     BlockRenderer.js         smista i blocchi ai componenti
   api/                       route API (ricerca, ...)
